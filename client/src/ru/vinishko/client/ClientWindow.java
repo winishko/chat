@@ -15,12 +15,10 @@ import javafx.stage.Stage;
 import ru.vinishko.network.TCPConnection;
 import ru.vinishko.network.TCPConnectionListener;
 
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.beans.EventHandler;
+
 import java.io.IOException;
 import java.net.URL;
-import java.util.Observable;
+
 import java.util.ResourceBundle;
 
 public class ClientWindow extends Application  implements TCPConnectionListener, Initializable {
