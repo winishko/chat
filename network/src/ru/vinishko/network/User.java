@@ -26,7 +26,7 @@ public class User implements Serializable {
         this.pass = pass;
         this.email=email;
 
-        logined=false;
+        logined=true;
         notFound=false;
     }
     public User(String name, String pass,String email,boolean reg) {
@@ -59,6 +59,10 @@ public class User implements Serializable {
 
     public User() {
         notFound=true;
+        this.name = "";
+        this.pass = "";
+        this.logined=false;
+        this.reg=false;
     }
 
     public String getName() {
