@@ -149,7 +149,7 @@ public class ClientWindow extends Application  implements TCPConnectionListener,
                         @Override
                         public void run() {
                                 if(person_in == true) {
-                                        Message msg = new Message(login_name, typeMSG.getText());
+                                        Message msg = new Message(login_name, AESCipher.encrypt(typeMSG.getText(),CKEY),true);
                                         System.out.println(msg);
                                         if (msg.equals("")) return;
                                         typeMSG.setText(null);
@@ -190,7 +190,8 @@ public void changeFocus(){
                             if(value.getClass().equals(Message.class)){
                                 //printMsg(AESCipher.decrypt(value.toString(),CKEY));
                                 Message v=(Message) value;
-                                printMsg(v.getName()+": "+v.getMsg());
+                                if(v.isEncrypted()) printMsg(v.getName()+": "+AESCipher.decrypt(v.getMsg(),CKEY));
+                                 else printMsg(v.getName()+": "+v.getMsg());
                             }
 
                             if(value.getClass().equals(User.class)){

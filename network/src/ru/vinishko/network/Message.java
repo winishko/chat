@@ -22,6 +22,10 @@ public class Message implements Serializable{
         this.encrypted=encrypted;
     }
 
+    public boolean isEncrypted() {
+        return encrypted;
+    }
+
     public String getMsg() {
         return msg;
     }
