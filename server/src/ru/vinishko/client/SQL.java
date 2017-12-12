@@ -53,7 +53,7 @@ public class SQL {
             statement.setString(1,name);
             ResultSet rs=statement.executeQuery();
             statement.clearParameters();
-            return new User(rs.getString("name"),rs.getString("pass"));
+            return new User(rs.getString("name"),rs.getString("pass"),rs.getString("email"));
         } catch (SQLException e) {
             e.printStackTrace();
             return new User();

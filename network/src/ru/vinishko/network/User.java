@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class User implements Serializable {
     private String name;
     private String pass;
+    private String email;
     private boolean logined;
     private boolean notFound;
     private boolean reg;
@@ -15,9 +16,23 @@ public class User implements Serializable {
         logined=false;
         notFound=false;
     }
-    public User(String name, String pass,boolean reg) {
+
+    public String getEmail() {
+        return email;
+    }
+
+    public User(String name, String pass, String email) {
         this.name = name;
         this.pass = pass;
+        this.email=email;
+
+        logined=false;
+        notFound=false;
+    }
+    public User(String name, String pass,String email,boolean reg) {
+        this.name = name;
+        this.pass = pass;
+        this.email=email;
         this.reg=reg;
         logined=false;
         notFound=false;

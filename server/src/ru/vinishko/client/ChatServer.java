@@ -66,8 +66,8 @@ public class ChatServer implements TCPConnectionListener {
             User user=(User) value;
             User u=sql.find(user.getName());
             System.out.println(u.getName()+" "+u.getPass());
-            if(u.notFound()){
-                sql.insert(user.getName(),user.getPass()," ");
+            if(u.notFound()&&user.isReg()){
+                sql.insert(user.getName(),user.getPass(),user.getEmail());
                 tcpConnection.send(new User(user.isReg()));
             }
             else tcpConnection.send(new User(u.getName(),u.getPass().equals(user.getPass()),user.isReg()));

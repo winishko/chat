@@ -129,7 +129,7 @@ public class ClientWindow extends Application  implements TCPConnectionListener,
 
         @FXML
         public void reg(ActionEvent actionEvent){
-            connection.send(new User(login.getText(),password.getText(),true));
+            connection.send(new User(login.getText(),password.getText(),"example@mail.com",true));
         }
 
         public void reg(User user){
