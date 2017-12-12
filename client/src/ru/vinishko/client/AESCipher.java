@@ -7,7 +7,7 @@ public class AESCipher {
 
     public static String encrypt(String input, String key) {
         byte[] crypted = null;
-        if(input==null) return "";
+        if (input == null) return "";
         try {
 
             SecretKeySpec skey = new SecretKeySpec(key.getBytes(), "AES");
@@ -25,7 +25,7 @@ public class AESCipher {
 
     public static String decrypt(String input, String key) {
         byte[] output = null;
-        if(input==null) return "";
+        if (input == null) return "";
         try {
             java.util.Base64.Decoder decoder = java.util.Base64.getDecoder();
             SecretKeySpec skey = new SecretKeySpec(key.getBytes(), "AES");

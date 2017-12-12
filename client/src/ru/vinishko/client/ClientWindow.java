@@ -12,8 +12,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import ru.vinishko.network.Message;
 import ru.vinishko.network.TCPConnection;
 import ru.vinishko.network.TCPConnectionListener;
+import ru.vinishko.network.User;
 
 
 import java.io.IOException;
@@ -28,7 +30,7 @@ public class ClientWindow extends Application  implements TCPConnectionListener,
 
 
         private TCPConnection connection;
-        private static final String IP_ADDR = "192.168.43.227";
+        private static final String IP_ADDR = "localhost";
         private static final int PORT = 8189;
         private static String login_name;
         private boolean person_in = false;
@@ -87,10 +89,15 @@ public class ClientWindow extends Application  implements TCPConnectionListener,
 
         @FXML
         public void inSystem(ActionEvent actionEvent) {
+            connection.send(new User(login.getText(),password.getText()));
+        }
 
-                login_name = login.getText();
 
-                if(login_name.isEmpty()||!password.getText().equals("3359")){
+        public void inSystem(User user) {
+
+                login_name = user.getName();
+
+                if(!user.isLogined()||user.notFound()){
                         person_in = false;
                         typeMSG.setText("Неверный логин или пароль");
                 }
@@ -101,9 +108,7 @@ public class ClientWindow extends Application  implements TCPConnectionListener,
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            connection.sendString(AESCipher.encrypt("Пользователь " + login_name + " присоединился к диалогу!",CKEY));
-                            login_name += ": ";
-
+                            connection.sendString("Пользователь " + login_name + " присоединился к диалогу!");
                             typeMSG.clear();
                         }
                     });
@@ -122,6 +127,19 @@ public class ClientWindow extends Application  implements TCPConnectionListener,
 
         }
 
+        @FXML
+        public void reg(ActionEvent actionEvent){
+            connection.send(new User(login.getText(),password.getText(),true));
+        }
+
+        public void reg(User user){
+            if(!user.notFound()&&user.isReg()){
+                typeMSG.setText("Пользоваетль с таким именем существует");
+            } else {
+                typeMSG.setText("Регистрация прошла успешно");
+                reg_in_system.setDisable(true);
+            }
+        }
 
 
         @FXML
@@ -131,11 +149,11 @@ public class ClientWindow extends Application  implements TCPConnectionListener,
                         @Override
                         public void run() {
                                 if(person_in == true) {
-                                        String msg = login_name + typeMSG.getText();
+                                        Message msg = new Message(login_name, typeMSG.getText());
                                         System.out.println(msg);
                                         if (msg.equals("")) return;
                                         typeMSG.setText(null);
-                                        connection.sendString(AESCipher.encrypt(msg,CKEY));
+                                        connection.send(msg);
                                 }
                                 else{
                                         typeMSG.setText("Вы в режиме гостя. Для отправки сообщенй войдите в систему.");
@@ -161,11 +179,26 @@ public void changeFocus(){
         }
 
         @Override
-        public void onReceiveString(TCPConnection tcpConnection, String value) {
+        public void onReceiveString(TCPConnection tcpConnection, Object value) {
                 Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                                printMsg(AESCipher.decrypt(value,CKEY));
+                            if(value.getClass().equals(String.class)){
+                                    //printMsg(AESCipher.decrypt(value.toString(),CKEY));
+                                printMsg(value.toString());
+                            }
+                            if(value.getClass().equals(Message.class)){
+                                //printMsg(AESCipher.decrypt(value.toString(),CKEY));
+                                Message v=(Message) value;
+                                printMsg(v.getName()+": "+v.getMsg());
+                            }
+
+                            if(value.getClass().equals(User.class)){
+                                User user=(User) value;
+                                if(user.isReg()){
+                                    reg(user);
+                                } else inSystem(user);
+                            }
 
 
                         }

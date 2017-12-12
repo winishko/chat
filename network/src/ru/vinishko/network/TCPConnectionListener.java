@@ -11,7 +11,7 @@ package ru.vinishko.network;
 public interface TCPConnectionListener {
 
      void onConnectionReady(TCPConnection tcpConnection);
-     void onReceiveString(TCPConnection tcpConnection, String value);
+     void onReceiveString(TCPConnection tcpConnection, Object value);
      void onDisconnect(TCPConnection tcpConnection);
      void onException(TCPConnection tcpConnection, Exception e);
 }
